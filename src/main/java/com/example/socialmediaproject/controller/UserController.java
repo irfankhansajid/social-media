@@ -41,7 +41,6 @@ public class UserController {
     }
     @DeleteMapping("/users/{userId}")
     public String deleteUser(@PathVariable("userId") Integer id) {
-
         return "User deleted successfully by id "+ id;
     }
 }
