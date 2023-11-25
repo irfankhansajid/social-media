@@ -1,10 +1,16 @@
 package com.example.socialmediaproject.controller;
 
 import com.example.socialmediaproject.models.User;
+import com.example.socialmediaproject.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class UserController {
+
+    @Autowired
+    UserRepository userRepository;
+
     @GetMapping("/users/{userId}")
     public User getUserId(@PathVariable("userId") Integer id) {
         User user1 = new User(1, "Irfan", "Khan", "irfankhansajid@gmail.com", "1234");
@@ -21,7 +27,8 @@ public class UserController {
         newUser.setEmail(user.getEmail());
         newUser.setPassword(user.getPassword());
 
-        return newUser;
+        User savedUser = userRepository.save(newUser);
+        return savedUser;
     }
     
     @PutMapping("/users")
