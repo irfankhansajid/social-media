@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -25,11 +24,13 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public User getUserId(@PathVariable("userId") Integer id) throws Exception {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return user.get();
-        }
-        throw new Exception("User not found on that id " + id);
+//        Optional<User> user = userRepository.findById(id);
+//        if (user.isPresent()) {
+//            return user.get();
+//        }
+//        throw new Exception("User not found on that id " + id);
+
+        return userService.findUserById(id);
 
     }
 
@@ -40,18 +41,22 @@ public class UserController {
 
     @PutMapping("/users/{userId}")
     public User updateUser(@RequestBody User user, @PathVariable Integer userId) throws Exception {
+
+
         return userService.updateUser(user, userId);
     }
 
-    @DeleteMapping("/users/{userId}")
-    public String deleteUser(@PathVariable("userId") Integer id) throws Exception {
-        Optional<User> user = userRepository.findById(id);
-
-        if (user.isEmpty()) {
-            throw new Exception("User not exit with id " + id);
-        }
-        userRepository.delete((user.get()));
-
-        return "User deleted successfully by id " + id;
+    @PutMapping("/users/follow/{userId1}/{userId2}")
+    public User followUserHandler(@PathVariable Integer userId1, @PathVariable Integer userId2) throws Exception {
+        User user = userService.followUser(userId1, userId2);
+        return user;
     }
+ 
+    @GetMapping("/users/search")
+    public List<User> searchUser(@RequestParam("query") String query) {
+        List<User> users = userService.searchUser(query);
+        return users;
+    }
+
+
 }
